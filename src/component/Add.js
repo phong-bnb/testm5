@@ -1,23 +1,57 @@
-import "bootstrap/dist/css/bootstrap.css"
-import { useFormik } from "formik"
-function Add() {
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import axios from "axios";
+export default function Add() {
+    const navigate = useNavigate();
+    const [tour, setTour] = useState({
+        id : "setTour",
+        title: "",
+        price: "",
+        description: "",
+    });
+
+    const onChangeHandled = (e) => {
+        let name = e.target.name;
+        let value = e.target.value;
+        setTour({ ...tour, [name]: value });
+    };
     return (
-        <>  ADD Tour
-            <form>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" />
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" />
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </>
-    )
+        <div className="container w-25 shadow-sm p-3 mb-5 bg-body rounded mt-5">
+            <h1>Edit tour</h1>
+            <input
+                type="text"
+                className="form-control"
+                placeholder="Enter Name"
+                name="title"
+                onChange={onChangeHandled}
+            />
+            <br />
+            <input
+                type="text"
+                className="form-control"
+                placeholder="Enter Price"
+                name="price"
+                onChange={onChangeHandled}
+            />
+            <br />
+            <input
+                type="text"
+                className="form-control"
+                placeholder="Enter Description"
+                name="description"
+                onChange={onChangeHandled}
+            />
+            <br />
+            <button
+                type="button"
+                className="btn btn-outline-primary"
+                onClick={() => {
+                    axios.post(`http://localhost:3080/tuors`, tour);
+                    navigate("/list");
+                }}
+            >
+                Update
+            </button>
+        </div>
+    );
 }
